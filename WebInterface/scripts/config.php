@@ -3,10 +3,11 @@
 
 /* Database config */
 
-$db_host		= 'mywebsite.com'; //change these!!
-$db_user		= 'username';//change these!!
-$db_pass		= 'password1234';//change these!!
-$db_database		= 'minecraft'; //change these!!
+//$db_host		= 'mywebsite.com'; //change these!!
+//$db_user		= 'username';//change these!!
+//$db_pass		= 'password1234';//change these!!
+//$db_database		= 'minecraft'; //change these!!
+require("/srv/www/minecraft.openshell.no/waconfig.php");
 
 /* Market Price config */
 

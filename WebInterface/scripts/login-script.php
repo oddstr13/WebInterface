@@ -4,16 +4,16 @@
 	require 'config.php';
 	
 	if (isset($_COOKIE["oswebs"])) {
-		$osweb = new mysqli("localhost", "mcweb", "YruUJyTXtK5pNRyu5fand2ku", "mcweb");
+		$osweb = new mysqli($osweb_db_host, $osweb_db_user, $osweb_db_password, $osweb_db_database);
 
-		$osweb_query = sprintf("SELECT * FROM `osweb_sessions` WHERE `id`='%1s';", $osweb->real_escape_string($_COOKIE["oswebs"]));
+		$osweb_query = sprintf("SELECT * FROM `" . $osweb_db_prefix . "_sessions` WHERE `id`='%1s';", $osweb->real_escape_string($_COOKIE["oswebs"]));
 
 		$result = $osweb->query($osweb_query);
 		$websession = $result->fetch_array();
 		$result->close();
 
 		if ($websession) {
-			$osweb_query = sprintf("SELECT * FROM `osweb_profiles` WHERE `userid`='%1s';", $osweb->real_escape_string($websession["userid"]));
+			$osweb_query = sprintf("SELECT * FROM `" . $osweb_db_prefix . "_profiles` WHERE `userid`='%1s';", $osweb->real_escape_string($websession["userid"]));
 
 			$result = $osweb->query($osweb_query);
 			$webprofile = $result->fetch_array();
