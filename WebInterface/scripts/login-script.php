@@ -3,10 +3,38 @@
 	session_start();
 	require 'config.php';
 	
-	$Username = mysql_real_escape_string(stripslashes($_POST['Username']));
-	$Username = trim($Username);
-	$Password = md5(mysql_real_escape_string(stripslashes($_POST['Password'])));
-	$result = mysql_query("SELECT * FROM WA_Players WHERE name='$Username' AND pass='$Password'");
+	if (isset($_COOKIE["oswebs"])) {
+		$osweb = new mysqli("localhost", "mcweb", "YruUJyTXtK5pNRyu5fand2ku", "mcweb");
+
+		$osweb_query = sprintf("SELECT * FROM `osweb_sessions` WHERE `id`='%1s';", $osweb->real_escape_string($_COOKIE["oswebs"]));
+
+		$result = $osweb->query($osweb_query);
+		$websession = $result->fetch_array();
+		$result->close();
+
+		if ($websession) {
+			$osweb_query = sprintf("SELECT * FROM `osweb_profiles` WHERE `userid`='%1s';", $osweb->real_escape_string($websession["userid"]));
+
+			$result = $osweb->query($osweb_query);
+			$webprofile = $result->fetch_array();
+			$result->close();
+
+			if (!$webprofile["ign"]) {
+				header("Location: /verifyign.py");
+				exit();
+			}
+		} else {
+			header("Location: /login.py");
+			exit();
+		}
+	} else {
+		header("Location: /login.py");
+		exit();
+	}
+//	exit(); /* just for DEBUGing */
+	$Username = $webprofile["ign"];
+	$result = mysql_query("SELECT * FROM WA_Players WHERE name='$Username'");
+
 	$count = mysql_num_rows($result);
 	$playerRow = mysql_fetch_assoc($result);
 	//echo "<pre>";
@@ -25,7 +53,7 @@
 		unset($_SESSION['canBuy']);
 		unset($_SESSION['canSell']);
 		unset($_SESSION['Admin']);
-		header("Location: ../login.php?error=1");
+		header("Location: /login.py");
 	}
 	
 ?>

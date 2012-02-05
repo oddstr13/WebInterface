@@ -6,5 +6,5 @@
 	unset($_SESSION['canSell']);
 	unset($_SESSION['Admin']);
 	//setcookie(User, gone, $past);
-	header("Location: index.php");
+	header("Location: /logout.py");
 ?>
